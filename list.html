@@ -1,0 +1,61 @@
+<head>
+    <LINK href="astetic3.css" rel="stylesheet" type="text/css"></LINK>
+    <title>Friend_list</title>
+</head>
+<body class="body">
+    <div class="content">
+    <header><h1>Compadres</h1></header>
+    <form>
+        <br>
+        <br>
+        <input type="text2" class="text" id="finder" placeholder="Find friends through Username."/>
+        <br>
+        <br>
+        <button type="button" onclick="changelist()">Search Users</button>
+        </form>
+        
+    <script src="axios-master/dist/axios.js"></script>
+        
+        <script>
+        
+function changelist() {
+    var User= document.getElementById("finder").value;
+    axios.get("https://api.simbachain.com/v1/Storage/Deatails",{headers:{'APIKEY':'46ed2eb2875260cea10aec89d465de92f9853aa883b1b138944d2c85ea75d644'}}) 
+       .then(function(response) {
+       var i = 0;
+       var amount = parseInt(response.data.count);
+       var UserName = localStorage.getItem("Username");
+       var PublicKey = localStorage.getItem("PublicKey");
+       var account = 0
+        while (i != amount) {
+           if (User == response.data.results[i].payload.inputs.Username){
+            account = 1;
+            i += 1;
+           } else{
+               i += 1;
+           }
+       }    
+    if (account == 1){
+         var user_page = str.concat(User, UserName); 
+              console.log(user_page);
+              user_page = String(user_page);
+              User = string(User);
+              UserName = String(UserName);
+              var myBody = new FormData;
+              myBody.append("from", PublicKey);
+              myBody.append("Time", User);
+              myBody.append("assetId", UserName);
+              myBody.append("content",user_page);
+        axios.post("https://api.simbachain.com/v1/Storage/Last_post/", myBody,{headers:{'APIKEY':'46ed2eb2875260cea10aec89d465de92f9853aa883b1b138944d2c85ea75d644'}})
+            var new_page = str.concat("https://ScarConnections.com/", user_page)
+            console.log(new_page);
+    }
+    })  
+}
+
+        </script>
+        
+        
+    </div>
+    
+</body>

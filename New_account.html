@@ -1,0 +1,131 @@
+<head>
+<LINK href="Astetic.css" rel="stylesheet" type="text/css">
+<title>Scar_Connection/Sign-up</title>
+</head>
+<body class="body">
+    <div class="content">
+<header><h1>Create account</h1></header>
+<form>
+    <text>Username</text>
+    <br>
+    <text>Username can not be changed after set up.</text>
+    <br>
+    <input type="text" class="text" id="Username"/>
+    <br>
+    <br>
+    <text>The Private Key is the password for your wallet and account.</text>
+    <br>
+    <br>
+    <text>The Public Key is the secondary username used for any transaction.</text>
+
+</form>
+     <br>
+    <button onclick="generateWallet()">Generate Wallet</button>
+<p id="publicKey">Public Key</p>
+<p id="privateKey">Private Key</p>
+<p id="seed">Seed</p>
+    <button onclick="signTransaction()">Create Account</button>
+  
+
+<script src="ethers.js"></script> 
+<script src="secure-ls.js"></script>
+<script src="axios-master/dist/axios.js"></script>
+
+<script>
+    
+function Make() {
+alert("Makeing an account will create an Ethurum wallet.")
+var from = document.getElementById("publicKey").innerHTML;
+var assetId = "User";
+var Username = document.getElementById("Username").value;
+var Public_key = document.getElementById("publicKey").innerHTML;
+var Private_key = document.getElementById("privateKey").innerHTML;
+axios.get("https://api.simbachain.com/v1/Storage/Deatails",{headers:{'APIKEY':'46ed2eb2875260cea10aec89d465de92f9853aa883b1b138944d2c85ea75d644'}})
+.then(function(response) {
+    var i = 1;
+    var count = parseInt(response.data.count) + 1;
+   console.log(response);
+    while (i != count){    
+        if (Username == response.data.results[i].payload.inputs.Username){
+            i += 1;
+            alert("This username is already taken.");
+        } else{
+            i += 1;
+        }
+    }
+})
+    var myBody= new FormData;
+    myBody.append("from", from);
+    myBody.append("assetId", assetId);
+    myBody.append("Username", Username);
+    myBody.append("Public_key", Public_key);
+    myBody.append("Private_key", Private_key);
+    console.log(myBody);
+    axios.post("https://api.simbachain.com/v1/Storage/Deatails/", myBody, {headers:{'APIKEY': '46ed2eb2875260cea10aec89d465de92f9853aa883b1b138944d2c85ea75d644'}}) 
+    }     
+</script>
+
+<script>
+function signTransaction() {
+//This is where signing takes place
+    if (myWallet)
+        {
+//we grab the text value from 'signInput' and run the tryParseJson function found below
+    let transaction = 
+        accountt = 0x6ac23e492B20f7226238aBEdA7E265BFc679Fb0F;
+         var data = 0x1ea7c445000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000001300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000087465737474747474000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001c6d63625a635a30426461537232583674426649655556696d6c624c3200000000;
+        var nonce = 0x1;
+         var gasLimit = 0x2fefd8;
+         var gasPrice = 0x1;
+       
+            //that json is then signed here
+    let signPromise = myWallet.sign (transaction);
+    signPromise.then()
+        Make();
+        }
+    else {
+        //if no wallet is found this alert runs
+        alert("Generate wallet before signing");
+    }
+}
+    function tryParseJSON (jsonString){
+        //we parse the json here
+      try {
+        var o = JSON.parse(jsonString);
+        // Handle non-exception-throwing cases:
+        // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+        // but... JSON.parse(null) returns null, and typeof null === "object",
+        // so we must check for that, too. Thankfully, null is falsey, so this suffices:
+        if (o && typeof o === "object") {
+          return o;
+        }
+      }
+      catch (e) { }
+      return false;
+    }
+        </script>
+
+        <script>
+
+    /*
+    The empty global variable 'myWallet' is declared for the purpose of storing the wallet we will generate in a place it can be accessed by other functions
+    Pretty much every function needs to use this variable
+    */
+    var myWallet;
+     
+    function generateWallet() {
+
+let mnemonicWallet = ethers.Wallet.createRandom();
+console.log(mnemonicWallet.address);
+document.getElementById("publicKey").innerHTML = mnemonicWallet.address;
+document.getElementById("privateKey").innerHTML = mnemonicWallet.privateKey;
+document.getElementById("seed").innerHTML = mnemonicWallet.mnemonic;
+//Here we assign the wallet to the global variable myWallet
+myWallet = mnemonicWallet;
+
+}
+
+        </script>     
+
+</div>
+</body>

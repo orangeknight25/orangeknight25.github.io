@@ -1,0 +1,76 @@
+<head>
+    <LINK href="Astetic.css" rel="stylesheet" type="text/css"></LINK>
+<title>Scar_Connection/Sign-in</title>
+</head>
+<body class="body">
+    <div class="content">
+<header><h1>Sign In</h1></header>
+<form>  
+    <text>Username</text>
+    <br>
+    <input type="text" class="text" id="Username"/>
+    <br>
+    <br>
+    <text>Public Key</text>
+    <br>
+    <input type="text" class="text" id="Publickey"/>
+    <br>
+    <br>
+    <text>Private Key</text>
+    <br>
+    <input type="text" class="text" id="Privatekey">
+</form>
+    <br>
+    
+    <button onclick="Login()">Sign In</button>  
+    <br>
+    <br>    
+    <a href="New_account.html"> Create Account</a> 
+<script src="axios-master/dist/axios.js"></script>
+
+<script>
+
+function Login() {
+   console.log("hello")
+    var UserName = document.getElementById("Username").value;
+    var PublicKey = document.getElementById("Publickey").value;
+    var PrivateKey = document.getElementById("Privatekey").value;
+    localStorage.setItem("Username", UserName);
+    localStorage.setItem("PublicKey", PublicKey);
+    var i = 1;
+    var amount = 1;
+    axios.get("https://api.simbachain.com/v1/Storage/Deatails/",{headers:{'APIKEY':'46ed2eb2875260cea10aec89d465de92f9853aa883b1b138944d2c85ea75d644'}}) 
+    .then(function(response) {
+        var account = 1; 
+       amount = parseInt(response.data.count);
+        var check = parseInt(response.data.count) + 1;
+        while(i != amount){
+            if (UserName == response.data.results[i].payload.inputs.Username){
+                if (PublicKey == response.data.results[i].payload.inputs.Public_key){
+                    if (PrivateKey == response.data.results[i].payload.inputs.Private_key){
+                        account = 1;
+                        i += 1;
+                   }else {
+                       i += 1; 
+                   }
+                }else {
+                    i += 1;
+                }
+           }else { 
+               i += 1;
+           }
+        }
+        if (i == check){
+            alert("Some informantion was mistyped.");
+        }
+        if (account == 1){
+             window.open("list.html");
+             window.close;
+        }
+       
+    })
+}   
+
+    </script> 
+    </div>
+</body>
